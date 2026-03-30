@@ -1,0 +1,14 @@
+# Node data and binaries
+data/
+bin/
+
+# Experiment results (large logs)
+results/*/node.log
+results/*/debug_metrics.json
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
