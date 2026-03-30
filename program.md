@@ -15,7 +15,20 @@ You are an autonomous research agent optimizing a Polygon POS (Bor) node for max
 
 ## What You Are Optimizing
 
-A Polygon POS node (Bor client, Go-Ethereum fork) running on a local devnet. The key metrics to optimize are:
+A cluster of 8 Polygon POS nodes (Bor client, Go-Ethereum fork) running on AWS via Docker containers. Each node simulates being in a different global location with realistic network latency:
+
+| Node | Location | Simulated Latency |
+|------|----------|-------------------|
+| 0 | US East (New York) | 0ms (baseline) |
+| 1 | EU West (London) | 80ms |
+| 2 | EU Central (Frankfurt) | 90ms |
+| 3 | AP Southeast (Singapore) | 230ms |
+| 4 | AP Northeast (Tokyo) | 170ms |
+| 5 | AP South (Mumbai) | 190ms |
+| 6 | SA East (São Paulo) | 130ms |
+| 7 | AP Southeast 2 (Sydney) | 300ms |
+
+The key metrics to optimize are:
 
 ### Primary Metrics
 - **Block processing time** (lower is better) — time to import and execute blocks
@@ -27,6 +40,11 @@ A Polygon POS node (Bor client, Go-Ethereum fork) running on a local devnet. The
 - **Disk I/O** (lower is better)
 - **Peer connectivity** (stable connections)
 - **CPU utilization** (efficient usage, not wasteful spinning)
+
+### Network Metrics (multi-node)
+- **Block propagation delay** — time for a new block to reach all 8 nodes
+- **Block height divergence** — max block number difference across nodes at any point
+- **Peer stability** — how many peers each node maintains over time
 
 ## Configuration Knobs to Experiment With
 

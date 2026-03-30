@@ -1,0 +1,26 @@
+FROM golang:1.22-bookworm AS builder
+
+RUN apt-get update && apt-get install -y make gcc git
+
+# Build Bor from source
+WORKDIR /build
+RUN git clone --depth 1 --branch v1.5.2 https://github.com/maticnetwork/bor.git .
+RUN make bor
+
+# --- Runtime image ---
+FROM debian:bookworm-slim
+
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    iproute2 \
+    curl \
+    jq \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /build/build/bin/bor /usr/local/bin/bor
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 8545 30303 7071
+
+ENTRYPOINT ["/entrypoint.sh"]

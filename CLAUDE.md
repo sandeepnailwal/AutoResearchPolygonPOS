@@ -45,6 +45,22 @@ You are the research agent. Follow the autoresearch loop:
 
 ## Key Commands
 
+### AWS Multi-Node Cluster (8 nodes with simulated geo-latency)
+```bash
+# Deploy infrastructure (1 spot instance, ~$6/day)
+./scripts/aws/deploy.sh
+
+# Run experiment on remote cluster
+./scripts/aws/run_remote_experiment.sh [config.toml] [duration_seconds]
+
+# Check AWS costs
+./scripts/aws/check_costs.sh
+
+# Tear down when done (IMPORTANT — stops all charges)
+./scripts/aws/destroy.sh
+```
+
+### Local Single-Node (development/debugging)
 ```bash
 # First-time setup
 ./scripts/setup_devnet.sh

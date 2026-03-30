@@ -1,0 +1,267 @@
+# Docker Compose for running multiple Bor nodes on a single machine
+# Each node runs in its own container with isolated networking
+# Network latency is simulated via tc netem (applied by scripts/setup_latency.sh)
+
+services:
+  # ============================================================
+  # NODE 0 — Bootnode / Validator (New York — baseline, no added latency)
+  # ============================================================
+  bor-node-0:
+    image: autoresearch/bor:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.bor
+    container_name: bor-node-0
+    hostname: bor-node-0
+    cap_add:
+      - NET_ADMIN  # Required for tc netem
+    networks:
+      bornet:
+        ipv4_address: 172.25.0.10
+    ports:
+      - "8545:8545"   # RPC
+      - "30303:30303"  # P2P
+      - "7071:7071"   # pprof/metrics
+    volumes:
+      - node0-data:/data
+      - ../configs:/configs:ro
+      - ./genesis.json:/genesis.json:ro
+    environment:
+      - NODE_ID=0
+      - NODE_LOCATION=us-east
+      - LATENCY_MS=0
+    entrypoint: ["/entrypoint.sh"]
+
+  # ============================================================
+  # NODE 1 — London (80ms from NY)
+  # ============================================================
+  bor-node-1:
+    image: autoresearch/bor:latest
+    container_name: bor-node-1
+    hostname: bor-node-1
+    cap_add:
+      - NET_ADMIN
+    networks:
+      bornet:
+        ipv4_address: 172.25.0.11
+    ports:
+      - "8546:8545"
+      - "30304:30303"
+      - "7072:7071"
+    volumes:
+      - node1-data:/data
+      - ../configs:/configs:ro
+      - ./genesis.json:/genesis.json:ro
+    environment:
+      - NODE_ID=1
+      - NODE_LOCATION=eu-west
+      - LATENCY_MS=80
+    entrypoint: ["/entrypoint.sh"]
+
+  # ============================================================
+  # NODE 2 — Frankfurt (90ms from NY)
+  # ============================================================
+  bor-node-2:
+    image: autoresearch/bor:latest
+    container_name: bor-node-2
+    hostname: bor-node-2
+    cap_add:
+      - NET_ADMIN
+    networks:
+      bornet:
+        ipv4_address: 172.25.0.12
+    ports:
+      - "8547:8545"
+      - "30305:30303"
+      - "7073:7071"
+    volumes:
+      - node2-data:/data
+      - ../configs:/configs:ro
+      - ./genesis.json:/genesis.json:ro
+    environment:
+      - NODE_ID=2
+      - NODE_LOCATION=eu-central
+      - LATENCY_MS=90
+    entrypoint: ["/entrypoint.sh"]
+
+  # ============================================================
+  # NODE 3 — Singapore (230ms from NY)
+  # ============================================================
+  bor-node-3:
+    image: autoresearch/bor:latest
+    container_name: bor-node-3
+    hostname: bor-node-3
+    cap_add:
+      - NET_ADMIN
+    networks:
+      bornet:
+        ipv4_address: 172.25.0.13
+    ports:
+      - "8548:8545"
+      - "30306:30303"
+      - "7074:7071"
+    volumes:
+      - node3-data:/data
+      - ../configs:/configs:ro
+      - ./genesis.json:/genesis.json:ro
+    environment:
+      - NODE_ID=3
+      - NODE_LOCATION=ap-southeast
+      - LATENCY_MS=230
+    entrypoint: ["/entrypoint.sh"]
+
+  # ============================================================
+  # NODE 4 — Tokyo (170ms from NY)
+  # ============================================================
+  bor-node-4:
+    image: autoresearch/bor:latest
+    container_name: bor-node-4
+    hostname: bor-node-4
+    cap_add:
+      - NET_ADMIN
+    networks:
+      bornet:
+        ipv4_address: 172.25.0.14
+    ports:
+      - "8549:8545"
+      - "30307:30303"
+      - "7075:7071"
+    volumes:
+      - node4-data:/data
+      - ../configs:/configs:ro
+      - ./genesis.json:/genesis.json:ro
+    environment:
+      - NODE_ID=4
+      - NODE_LOCATION=ap-northeast
+      - LATENCY_MS=170
+    entrypoint: ["/entrypoint.sh"]
+
+  # ============================================================
+  # NODE 5 — Mumbai (190ms from NY)
+  # ============================================================
+  bor-node-5:
+    image: autoresearch/bor:latest
+    container_name: bor-node-5
+    hostname: bor-node-5
+    cap_add:
+      - NET_ADMIN
+    networks:
+      bornet:
+        ipv4_address: 172.25.0.15
+    ports:
+      - "8550:8545"
+      - "30308:30303"
+      - "7076:7071"
+    volumes:
+      - node5-data:/data
+      - ../configs:/configs:ro
+      - ./genesis.json:/genesis.json:ro
+    environment:
+      - NODE_ID=5
+      - NODE_LOCATION=ap-south
+      - LATENCY_MS=190
+    entrypoint: ["/entrypoint.sh"]
+
+  # ============================================================
+  # NODE 6 — São Paulo (130ms from NY)
+  # ============================================================
+  bor-node-6:
+    image: autoresearch/bor:latest
+    container_name: bor-node-6
+    hostname: bor-node-6
+    cap_add:
+      - NET_ADMIN
+    networks:
+      bornet:
+        ipv4_address: 172.25.0.16
+    ports:
+      - "8551:8545"
+      - "30309:30303"
+      - "7077:7071"
+    volumes:
+      - node6-data:/data
+      - ../configs:/configs:ro
+      - ./genesis.json:/genesis.json:ro
+    environment:
+      - NODE_ID=6
+      - NODE_LOCATION=sa-east
+      - LATENCY_MS=130
+    entrypoint: ["/entrypoint.sh"]
+
+  # ============================================================
+  # NODE 7 — Sydney (300ms from NY)
+  # ============================================================
+  bor-node-7:
+    image: autoresearch/bor:latest
+    container_name: bor-node-7
+    hostname: bor-node-7
+    cap_add:
+      - NET_ADMIN
+    networks:
+      bornet:
+        ipv4_address: 172.25.0.17
+    ports:
+      - "8552:8545"
+      - "30310:30303"
+      - "7078:7071"
+    volumes:
+      - node7-data:/data
+      - ../configs:/configs:ro
+      - ./genesis.json:/genesis.json:ro
+    environment:
+      - NODE_ID=7
+      - NODE_LOCATION=ap-southeast-2
+      - LATENCY_MS=300
+    entrypoint: ["/entrypoint.sh"]
+
+  # ============================================================
+  # Monitoring — Prometheus + Grafana
+  # ============================================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    networks:
+      bornet:
+        ipv4_address: 172.25.0.200
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention.time=7d'
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    networks:
+      bornet:
+        ipv4_address: 172.25.0.201
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=autoresearch
+      - GF_USERS_ALLOW_SIGN_UP=false
+
+networks:
+  bornet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/24
+
+volumes:
+  node0-data:
+  node1-data:
+  node2-data:
+  node3-data:
+  node4-data:
+  node5-data:
+  node6-data:
+  node7-data:
+  prometheus-data:
+  grafana-data:

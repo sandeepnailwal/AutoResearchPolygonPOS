@@ -1,0 +1,8 @@
+# Copy this to terraform.tfvars and fill in your values
+
+aws_region       = "us-east-1"
+key_name         = "your-ec2-keypair-name"
+allowed_ssh_cidr = "YOUR_IP/32"    # Run: curl -s ifconfig.me
+instance_type    = "c5.4xlarge"     # 16 vCPU, 32GB RAM
+spot_max_price   = "0.25"           # ~$6/day
+root_volume_size = 200              # GB

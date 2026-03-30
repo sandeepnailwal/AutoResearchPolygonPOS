@@ -2,9 +2,20 @@
 data/
 bin/
 
-# Experiment results (large logs)
+# Experiment results (large logs and node logs)
 results/*/node.log
-results/*/debug_metrics.json
+results/*/node*.log
+results/*/debug_metrics*.json
+
+# Terraform state (contains sensitive info)
+infra/.terraform/
+infra/.terraform.lock.hcl
+infra/terraform.tfstate
+infra/terraform.tfstate.backup
+infra/terraform.tfvars
+
+# SSH keys
+*.pem
 
 # Python
 __pycache__/
